@@ -1,69 +1,82 @@
 "use client";
-import React from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import Link from "next/link";
 
 const register = () => {
-  const handleSubmit = (e: React.FormEvent) => {
+
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const name = (e.target as HTMLFormElement).name.value;
-    const email = (e.target as HTMLFormElement).email.value;
-    const password = (e.target as HTMLFormElement).password.value;
-    console.log({name, email, password});
+
+    const target = e.target as typeof e.target & {
+      name: { value: string };
+      email: { value: string };
+      password: { value: string };
+    };
+
+    const name = target.name.value;
+    const email = target.email.value;
+    const password = target.password.value;
+
+    console.log({ name, email, password });
   };
 
   return (
-    <div className="border p-5 max-w-md mx-auto mt-10 bg-white shadow-md rounded-lg">
-      <h1 className="text-2xl font-bold text-center mt-10 ">Signup Page</h1>
-      <form onSubmit={handleSubmit} className="max-w-md mx-auto mt-5">
-        <div className="mb-4">
-          <label
-            htmlFor="name"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Name
-          </label>
-          <input
-            type="text"
-            id="name"
-            className="mt-1 block w-full border-gray-600 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"
-            required
-          />
+    <form onSubmit={handleSubmit} className="flex justify-center items-center h-screen ">
+      <Card className="w-full max-w-sm">
+        <div className="flex justify-between items-center mx-6">
+          <p className="text-2xl">Register a account</p>
+          <div>
+            <Link href="/login" className="text-blue-700">Log in</Link>
+          </div>
         </div>
-        <div className="mb-4">
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            className="mt-1 block w-full border-gray-600 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium text-gray-600"
-          >
-            Password
-          </label>
-          <input
-            type="password"
-            id="password"
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"
-            required
-          />
-        </div>
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
-        >
-          Login
-        </button>
-      </form>
-    </div>
+        <CardContent>
+          <form>
+            <div className="flex flex-col gap-6">
+              <div className="grid gap-2">
+                <Label htmlFor="email">Name</Label>
+                <Input
+                  id="Name"
+                  type="text"
+                  placeholder="name"
+                  required
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="m@example.com"
+                  required
+                />
+              </div>
+              <div className="grid gap-2">
+                <div className="flex items-center">
+                  <Label htmlFor="password">Password</Label>
+                </div>
+                <Input id="password" type="password" placeholder="password" required />
+              </div>
+            </div>
+          </form>
+        </CardContent>
+        <CardFooter className="flex-col gap-2">
+          <Button type="submit" className="w-full bg-blue-700 hover:bg-blue-800 text-white">
+            Sign up
+          </Button>
+          <Button variant="outline" className="w-full"> 
+            Sign up with Google
+          </Button>
+        </CardFooter>
+      </Card>
+    </form>
   );
 };
 
