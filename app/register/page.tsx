@@ -6,7 +6,8 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 
 const register = () => {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+
+  const handleSubmit = (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const target = e.target as typeof e.target & {
       email: { value: string };
@@ -16,6 +17,11 @@ const register = () => {
     const password = target.password.value;
     console.log({ email, password });
   };
+
+  const handleGoogleSignUp = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault(); 
+    console.log("Google Sign Up clicked");
+  }
 
   return (
     <form
@@ -32,7 +38,7 @@ const register = () => {
           </div>
         </div>
         <CardContent>
-          <form>
+          <div>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
                 <Label htmlFor="email">Name</Label>
@@ -59,7 +65,7 @@ const register = () => {
                 />
               </div>
             </div>
-          </form>
+          </div>
         </CardContent>
         <CardFooter className="flex-col gap-2">
           <Button
@@ -68,7 +74,7 @@ const register = () => {
           >
             Sign up
           </Button>
-          <Button variant="outline" className="w-full">
+          <Button onClick={handleGoogleSignUp} variant="outline" className="w-full">
             Sign up with Google
           </Button>
         </CardFooter>
