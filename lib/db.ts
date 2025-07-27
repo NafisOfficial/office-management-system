@@ -2,31 +2,46 @@ import mongoose from 'mongoose'
 
 
 
-const MONGODB_URI = process.env.MONGODB_URI || "";
+const MONGODB_URI = process.env.MONGODB_URI as string;
 
-if (!MONGODB_URI) {
-  throw new Error("Please define the MONGODB_URI in your .env file")
+if(!MONGODB_URI){
+    throw new Error("please correct the mongoDB UTI")
 }
 
-let cached = global.mongoose
-
-if(!cached){
-    cached = global.mongoose = {conn: null, promise: null}
+interface MongooseCache {
+  conn: typeof mongoose | null;
+  promise: Promise<typeof mongoose> | null;
 }
 
-if(!cached.promise){
-    cached.promise = mongoose.connect(MONGODB_URI,{
-        dbName: "taskManager",
-        bufferCommands: false
-    }).then((mongoose)=>mongoose)
+// Extend globalThis type
+declare global {
+  var mongoose: MongooseCache | undefined;
 }
 
-export async function ConnectionDB() {
-    if(cached.conn) return cached.conn;
-    cached.conn = await cached.promise;
-    return cached?.conn
+let cached: MongooseCache;
+
+
+if (!global.mongoose) {
+  global.mongoose = { conn: null, promise: null };
 }
 
+// eslint-disable-next-line prefer-const
+cached = global.mongoose;
 
+async function dbConnect() {
+  if (cached.conn) return cached.conn;
+
+  if (!cached.promise) {
+    cached.promise = mongoose.connect(MONGODB_URI, {
+      dbName: 'myAppDB',
+      bufferCommands: false,
+    }).then((mongoose) => mongoose);
+  }
+
+  cached.conn = await cached.promise;
+  return cached.conn;
+}
+
+export default dbConnect;
 
 
